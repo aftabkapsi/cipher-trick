@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import base64
-
+import os
 
 app = Flask(__name__)
 
@@ -16,9 +16,13 @@ app.config.update(
     TRUSTED_HOSTS=[
         "localhost",
         "127.0.0.1",
+        *(
+            [os.environ["RENDER_EXTERNAL_HOSTNAME"]]
+            if os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+            else []
+        ),
     ],
 )
-
 
 # =========================================================
 # LIMITER CONFIGURATION
